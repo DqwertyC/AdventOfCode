@@ -342,3 +342,10 @@ ASALocalRun/
 # Local configuration
 config.json
 AdventOfCode/Solutions/Year*/Day*/input
+AdventOfCode/Solutions/Year2020/Day01-input
+AdventOfCode/Solutions/Year2020/Day02-input
+AdventOfCode/Solutions/Year2020/Day03-input
+AdventOfCode/Solutions/Year2020/Day04-input
+AdventOfCode/Solutions/Year2020/Day05-input
+AdventOfCode/Solutions/Year2020/Day06-input
+AdventOfCode/Solutions/Year2020/Day07-input

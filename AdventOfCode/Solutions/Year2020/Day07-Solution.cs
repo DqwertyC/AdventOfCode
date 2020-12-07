@@ -15,24 +15,24 @@ namespace AdventOfCode.Solutions.Year2020
             {
                 new Bag(line);
             }
-
-            linksToGold = 0;
-
-            // Go through all the bags and see which ones end up at shiny gold
-            foreach (string s in Bag.allBags.Keys)
-            {
-                if (Bag.allBags[s].HasShiny()) linksToGold++;
-            }
         }
 
         protected override string SolvePartOne()
         {
-            return "" + linksToGold;
+            linksToGold = 0;
+
+            // Go through all the bags and see which ones end up at shiny gold
+            foreach (var s in Bag.allBags)
+            {
+                if (s.Value.HasShiny()) linksToGold++;
+            }
+
+            return linksToGold.ToString();
         }
 
         protected override string SolvePartTwo()
         {
-            return "" + (Bag.allBags["shiny gold"].CountChildren());
+            return Bag.allBags["shiny gold"].CountChildren().ToString();
         }
 
 
@@ -46,18 +46,15 @@ namespace AdventOfCode.Solutions.Year2020
             Dictionary<string, int> holds;
 
             public Bag(string input)
-            {
-                // Clean up the input string to make parsing easier
-                string cleaned = input.Replace("bags", "bag");
-                cleaned = cleaned.Replace("contains", "contain");
+            { 
 
                 // Set up our contents
                 holds = new Dictionary<string, int>();
-                string[] partsA = cleaned.Split(" bag contain ");
+                string[] partsA = input.Replace("bags", "bag").Split("bag contain", StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                 name = partsA[0];
 
                 // Go through each bag this one contains
-                string[] contents = partsA[1].Split(", ");
+                string[] contents = partsA[1].Split(",", StringSplitOptions.TrimEntries);
 
                 foreach (string s in contents)
                 {
@@ -66,9 +63,9 @@ namespace AdventOfCode.Solutions.Year2020
                         string[] partsB = s.Split(" ");
 
                         int count = Int32.Parse(partsB[0]);
-                        string name = partsB[1] + " " + partsB[2];
+                        string heldName = partsB[1] + " " + partsB[2];
 
-                        holds[name] = count;
+                        holds[heldName] = count;
                     }
                 }
 

@@ -9,7 +9,7 @@ namespace AdventOfCode.Solutions.Year2015
         private static int maxScore;
         private static int maxWithCap;
 
-        public Day15() : base(08, 2015, "")
+        public Day15() : base(15, 2015, "")
         {
             maxScore = 0;
             maxWithCap = 0;

@@ -4,7 +4,6 @@ using System.Text;
 
 namespace AdventOfCode.Solutions.Year2020
 {
-
     class Day09 : ASolution
     {
         long partOne;
@@ -15,7 +14,6 @@ namespace AdventOfCode.Solutions.Year2020
             long[] pastNumbers = new long[25];
             int index = 0;
             int count = 0;
-            
 
             foreach (string line in Input.SplitByNewline())
             {

@@ -10,6 +10,8 @@ namespace AdventOfCode.Solutions.Year2020
         long partOne;
         long partTwo;
 
+
+        // Initial Conditions
         static int facing = 0;
         static int x;
         static int y;
@@ -30,7 +32,6 @@ namespace AdventOfCode.Solutions.Year2020
 
             partOne = Math.Abs(x) + Math.Abs(y);
             partTwo = Math.Abs(shipX) + Math.Abs(shipY);
-            
         }
 
         protected override string SolvePartOne()
@@ -43,7 +44,7 @@ namespace AdventOfCode.Solutions.Year2020
             return partTwo.ToString();
         }
 
-        void UpdateState(string command)
+        private static void UpdateState(string command)
         {
             if (command.StartsWith('E'))
             {

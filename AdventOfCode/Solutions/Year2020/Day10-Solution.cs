@@ -13,96 +13,43 @@ namespace AdventOfCode.Solutions.Year2020
         public Day10() : base(10, 2020, "")
         {
             List<int> adapters = new List<int>();
+            Dictionary<int, long> paths = new Dictionary<int, long>();
+            paths[0] = 1;
 
             adapters.AddRange(Input.ToIntArray("\n"));
+            adapters.Add(0);
             adapters.Sort();
+            adapters.Add(adapters[adapters.Count - 1] + 3);
 
             int countOne = 0;
             int countThree = 0;
 
-            // Check the offset of the first adapter
-            if (adapters[0] == 1) countOne++;
-            else countThree++;
+            int adapterVal;
+            int oldAdapterVal = adapters[0];
 
             // Count how many are seperated by one and how many by three
             for (int i = 1; i < adapters.Count; i++)
             {
-                if (adapters[i] - adapters[i - 1] == 1) countOne++;
-                else if (adapters[i] - adapters[i - 1] == 3) countThree++;
-            }
+                adapterVal = adapters[i];
 
-            // Add a plus one for the computer adapter
-            partOne = countOne * (countThree + 1);
+                if (adapterVal - oldAdapterVal == 1) countOne++;
+                else countThree++;
 
-            int strandlength = 0;
-            if (adapters[0] == 1) strandlength++;
+                long pathCount = 0;
 
-            List<long> factors = new List<long>();
-
-            // Each strand of ones can be traversed multiple ways, but are all
-            // independent of the other strands of ones
-            for (int i = 1; i < adapters.Count; i++)
-            {
-                if (adapters[i] == adapters[i-1] + 1)
+                for (int j = 1; j <= 3; j++)
                 {
-                    strandlength++;
+                    if (paths.ContainsKey(adapterVal - j)) pathCount += paths[adapterVal - j];
                 }
-                else
-                {
-                    factors.Add(lengthToFactor(strandlength));
-                    strandlength = 0;
-                }
+
+                paths[adapterVal] = pathCount;
+                partTwo = pathCount;
+
+                oldAdapterVal = adapterVal;
             }
 
-            // Don't forget the last one!
-            factors.Add(lengthToFactor(strandlength));
-            long product = 1;
+            partOne = countOne * countThree;
 
-            // Multiply them all together
-            foreach (long i in factors)
-            {
-                product *= i;
-            }
-
-            partTwo = product;
-
-        }
-
-        private long lengthToFactor(int input)
-        {
-            long factor = 0;
-
-            for (int i = 0; i <= (input / 3); i++)
-            {
-                int spotsLeft = input - 3 * i;
-
-                for (int j = 0; j <= (spotsLeft /2); j++)
-                {
-                    int blocksOfThree = i;
-                    int blocksOfTwo = j;
-                    int blocksOfOne = spotsLeft - 2 * j;
-
-                    long factorOne = factorial(blocksOfOne + blocksOfTwo + blocksOfThree);
-                    long factorTwo = factorial(blocksOfOne) * factorial(blocksOfTwo) * factorial(blocksOfThree);
-
-                    factor += ((factorOne) / (factorTwo));
-                }
-            }
-            return factor;
-        }
-        
-
-
-        private long factorial(int input)
-        {
-            long output = 1;
-
-            for (int i = 1; i <= input; i++)
-            {
-                output *= i;
-            }
-
-            return output;
         }
 
         protected override string SolvePartOne()

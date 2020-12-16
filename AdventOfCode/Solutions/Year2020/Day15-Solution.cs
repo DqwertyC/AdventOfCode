@@ -29,9 +29,7 @@ namespace AdventOfCode.Solutions.Year2020
             while (index < 30000000)
             {
                 lastVal = nextVal;
-
-                if ((!lastAddress.TryGetValue(nextVal, out int lastMatch))
-                    lastMatch = index;
+                int lastMatch = lastAddress.GetValueOrDefault(nextVal, index);
                 nextVal = index - lastMatch;
                 lastAddress[lastVal] = index++;
 

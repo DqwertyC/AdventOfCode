@@ -166,8 +166,8 @@ namespace AdventOfCode.Solutions
             public static readonly Coordinate2D unit_x = new Coordinate2D(1, 0);
             public static readonly Coordinate2D unit_y = new Coordinate2D(0, 1);
 
-            int x;
-            int y;
+            public int x;
+            public int y;
 
             public Coordinate2D(int x, int y)
             {
@@ -246,6 +246,18 @@ namespace AdventOfCode.Solutions
             {
                 return (100 * x + y).GetHashCode();
             }
+
+            public static Coordinate2D[] GetNeighbors()
+            {
+                return neighbors2D;
+            }
+
+            private static Coordinate2D[] neighbors2D =
+            {
+                (-1,-1),(-1,+0),(-1,+1),
+                (+0,-1),        (+0,+1),
+                (+1,-1),(+1,+0),(+1,+1)
+            };
 
         }
 

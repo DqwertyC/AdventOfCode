@@ -29,7 +29,6 @@ namespace AdventOfCode.Solutions
                     .Select(n => Convert.ToInt32(n))
                     .ToArray();
             }
-
         }
 
 
@@ -158,6 +157,20 @@ namespace AdventOfCode.Solutions
             if (sorted) keyList.Sort();
 
             return keyList;
+        }
+
+        //https://stackoverflow.com/questions/2641326/finding-all-positions-of-substring-in-a-larger-string-in-c-sharp
+        public static IEnumerable<int> AllIndexesOf(this string str, string value)
+        {
+            if (string.IsNullOrEmpty(value))
+                throw new ArgumentException("the string to find may not be empty", nameof(value));
+            for (int index = 0; ; index += value.Length)
+            {
+                index = str.IndexOf(value, index);
+                if (index == -1)
+                    break;
+                yield return index;
+            }
         }
 
         public class Coordinate2D

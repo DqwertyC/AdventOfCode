@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using static AdventOfCode.Solutions.Utilities;
 
@@ -15,6 +16,9 @@ namespace AdventOfCode.Solutions.Year2020
 
         public Day20() : base(20, 2020, "")
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             string[] tiles = Input.Split("\n\n");
 
             Dictionary<int,int> allEdges = new Dictionary<int,int>();
@@ -344,9 +348,6 @@ namespace AdventOfCode.Solutions.Year2020
             }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
             bool[,] massiveMap = new bool[12 * 8, 12 * 8];
 
@@ -428,6 +429,8 @@ namespace AdventOfCode.Solutions.Year2020
 
             partTwo = tileCount.ToString();
 
+            stopwatch.Stop();
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);
         }
 
         protected override string SolvePartOne()

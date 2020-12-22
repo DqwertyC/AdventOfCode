@@ -64,6 +64,23 @@ namespace AdventOfCode.Solutions
             }
         }
 
+        public static List<int> Factor(this int number)
+        {
+            var factors = new List<int>();
+            int max = (int)Math.Sqrt(number);  // Round down
+
+            for (int factor = 1; factor <= max; ++factor) // Test from 1 to the square root, or the int below it, inclusive.
+            {
+                if (number % factor == 0)
+                {
+                    factors.Add(factor);
+                    if (factor != number / factor) // Don't add the square root twice!  Thanks Jon
+                        factors.Add(number / factor);
+                }
+            }
+            return factors;
+        }
+
         public static string JoinAsStrings<T>(this IEnumerable<T> items)
         {
             return string.Join("", items);

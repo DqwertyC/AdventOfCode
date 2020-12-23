@@ -17,7 +17,7 @@ namespace AdventOfCode
                 solution.Solve();
             }
 
-            Console.WriteLine($"Solved all Problems in {Solutions.totalSolveTime / 1000}.{Solutions.totalSolveTime % 1000}ms");
+            //Console.WriteLine($"Solved all Problems in {Solutions.totalSolveTime / 1000}.{Solutions.totalSolveTime % 1000}ms");
 
 
         }

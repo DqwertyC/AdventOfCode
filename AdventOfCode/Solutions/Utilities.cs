@@ -262,7 +262,7 @@ namespace AdventOfCode.Solutions
                 }
             }
 
-            private Coordinate2D RotateCW()
+            public Coordinate2D RotateCW()
             {
                 return new Coordinate2D(y, -x);
             }
@@ -284,7 +284,7 @@ namespace AdventOfCode.Solutions
                 }
             }
 
-            private Coordinate2D RotateCCW()
+            public Coordinate2D RotateCCW()
             {
                 return new Coordinate2D(-y, x);
             }

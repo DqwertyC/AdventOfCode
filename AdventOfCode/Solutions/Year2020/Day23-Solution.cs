@@ -11,7 +11,6 @@ namespace AdventOfCode.Solutions.Year2020
         string partTwo;
 
         public Day23() : base(23, 2020, "")
-        public Day23() : base(23, 2020, "")
         {
             Dictionary<int, LoopedListNode> nodeDictionaryOne = new Dictionary<int, LoopedListNode>();
             Dictionary<int, LoopedListNode> nodeDictionaryTwo = new Dictionary<int, LoopedListNode>();

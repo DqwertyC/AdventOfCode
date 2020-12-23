@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -9,10 +10,20 @@ namespace AdventOfCode.Solutions
 
     class SolutionCollector : IEnumerable<ASolution>
     {
+        readonly IEnumerable<ASolution> Solutions;
 
-        IEnumerable<ASolution> Solutions;
+        public long totalSolveTime;
 
-        public SolutionCollector(int year, int[] days) => Solutions = LoadSolutions(year, days).ToArray();
+        public SolutionCollector(int year, int[] days)
+        {
+            Solutions = LoadSolutions(year, days).ToArray();
+
+            totalSolveTime = 0;
+            foreach (ASolution s in Solutions)
+            {
+                totalSolveTime += s.ContructionTime;
+            }
+        }
 
         public ASolution GetSolution(int day)
         {
@@ -20,7 +31,7 @@ namespace AdventOfCode.Solutions
             {
                 return Solutions.Single(s => s.Day == day);
             }
-            catch(InvalidOperationException)
+            catch (InvalidOperationException)
             {
                 return null;
             }
@@ -36,19 +47,24 @@ namespace AdventOfCode.Solutions
             return GetEnumerator();
         }
 
-        IEnumerable<ASolution> LoadSolutions(int year, int[] days)
+        static IEnumerable<ASolution> LoadSolutions(int year, int[] days)
         {
-            if(days.Sum() == 0)
+            if (days.Sum() == 0)
             {
                 days = Enumerable.Range(1, 25).ToArray();
             }
-            
-            foreach(int day in days)
+
+            foreach (int day in days)
             {
-                var solution = Type.GetType($"AdventOfCode.Solutions.Year{year}.Day{day.ToString("D2")}");
-                if(solution != null)
+                Type solution = Type.GetType($"AdventOfCode.Solutions.Year{year}.Day{day:D2}");
+                if (solution != null)
                 {
-                    yield return (ASolution)Activator.CreateInstance(solution);
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    ASolution val = (ASolution)Activator.CreateInstance(solution);
+                    sw.Stop();
+                    val.ContructionTime = sw.ElapsedTicks;
+                    yield return val;
                 }
             }
         }

@@ -13,27 +13,29 @@ namespace AdventOfCode.Solutions.Year2015
 
         public Day20() : base(20, 2015, "")
         {
+            uint searchTarget = uint.Parse(Input);
+
             bool found = false;
-            int search = 0;
+            uint search = searchTarget / 50;
 
             while (!found)
             {
                 int houseGifts = CalculateGiftsPartOne(search);
 
-                if (houseGifts >= 36000000) found = true;
+                if (houseGifts >= searchTarget) found = true;
                 else search++;
             }
 
             partOne = search.ToString();
 
             found = false;
-            search = 0;
+            search = searchTarget / 50;
 
             while (!found)
             {
                 int houseGifts = CalculateGiftsPartTwo(search);
 
-                if (houseGifts >= 36000000) found = true;
+                if (houseGifts >= searchTarget) found = true;
                 else search++;
             }
 
@@ -50,7 +52,7 @@ namespace AdventOfCode.Solutions.Year2015
             return partTwo;
         }
 
-        private static int CalculateGiftsPartOne(int houseNumber)
+        private static int CalculateGiftsPartOne(uint houseNumber)
         {
             int gifts = 0;
 
@@ -62,7 +64,7 @@ namespace AdventOfCode.Solutions.Year2015
             return 10 * gifts;
         }
 
-        private static int CalculateGiftsPartTwo(int houseNumber)
+        private static int CalculateGiftsPartTwo(uint houseNumber)
         {
             int gifts = 0;
 

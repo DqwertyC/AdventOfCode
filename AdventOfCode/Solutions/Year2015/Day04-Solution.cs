@@ -8,12 +8,10 @@ namespace AdventOfCode.Solutions.Year2015
     class Day04 : ASolution
     {
 
+        string partOne;
+        string partTwo;
+
         public Day04() : base(04, 2015, "")
-        {
-
-        }
-
-        protected override string SolvePartOne()
         {
             int count = 0;
 
@@ -25,14 +23,7 @@ namespace AdventOfCode.Solutions.Year2015
                 result = CalculateHash(count);
             }
 
-            return count.ToString();
-        }
-
-        protected override string SolvePartTwo()
-        {
-            int count = 0;
-
-            string result = CalculateHash(count);
+            partOne = result;
 
             while (!result.StartsWith("000000"))
             {
@@ -40,7 +31,17 @@ namespace AdventOfCode.Solutions.Year2015
                 result = CalculateHash(count);
             }
 
-            return count.ToString();
+            partTwo = result;
+        }
+
+        protected override string SolvePartOne()
+        {
+            return partOne;
+        }
+
+        protected override string SolvePartTwo()
+        {
+            return partTwo;
         }
 
         public static string CalculateHash(int input)

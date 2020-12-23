@@ -64,21 +64,55 @@ namespace AdventOfCode.Solutions
             }
         }
 
-        public static List<int> Factor(this int number)
+        // From https://stackoverflow.com/a/3433222/4815952
+        public static IEnumerable<uint> Factor(this uint x)
         {
-            var factors = new List<int>();
-            int max = (int)Math.Sqrt(number);  // Round down
-
-            for (int factor = 1; factor <= max; ++factor) // Test from 1 to the square root, or the int below it, inclusive.
+            for (uint i = 1; i * i <= x; i++)
             {
-                if (number % factor == 0)
+                if (x % i == 0)
                 {
-                    factors.Add(factor);
-                    if (factor != number / factor) // Don't add the square root twice!  Thanks Jon
-                        factors.Add(number / factor);
+                    yield return i;
+                    if (i != x / i)
+                        yield return x / i;
                 }
             }
-            return factors;
+        }
+
+        public static List<int> primes;
+        static int largestPrime;
+
+        private static void InitializePrimes(int maxValue)
+        {
+            if (primes == null)
+            {
+                primes = new List<int>();
+                primes.AddRange(new int[] { 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97 });
+
+                largestPrime = 97;
+            }
+
+            int searchValue = largestPrime;
+
+            while (largestPrime < maxValue)
+            {
+                searchValue += 2;
+                
+                if (searchValue.IsPrimeTo(primes))
+                {
+                    primes.Add(searchValue);
+                    largestPrime = searchValue;
+                }
+            }
+        }
+
+        public static bool IsPrimeTo(this int val, List<int> primes)
+        {
+            foreach (int i in primes)
+            {
+                if (val % i == 0) return false;
+            }
+
+            return true;
         }
 
         public static string JoinAsStrings<T>(this IEnumerable<T> items)
@@ -264,7 +298,6 @@ namespace AdventOfCode.Solutions
             public static bool operator !=(Coordinate2D a, Coordinate2D b) => (a.x != b.x || a.y != b.y);
 
             public static implicit operator Coordinate2D((int x, int y) a) => new Coordinate2D(a.x, a.y);
-
             public static implicit operator (int x, int y) (Coordinate2D a) => (a.x, a.y);
             public override bool Equals(object obj)
             {

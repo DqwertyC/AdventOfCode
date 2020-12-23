@@ -1,4 +1,5 @@
 ﻿using AdventOfCode.Solutions;
+using System;
 
 namespace AdventOfCode
 {
@@ -15,6 +16,10 @@ namespace AdventOfCode
             {
                 solution.Solve();
             }
+
+            Console.WriteLine($"Solved all Problems in {Solutions.totalSolveTime / 1000}.{Solutions.totalSolveTime % 1000}ms");
+
+
         }
     }
 }

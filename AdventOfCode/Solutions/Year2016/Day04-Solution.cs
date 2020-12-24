@@ -34,17 +34,25 @@ namespace AdventOfCode.Solutions.Year2016
                 {
                     validSum += roomId;
 
+                    StringBuilder lineString = new StringBuilder();
+
                     for (int j = 0; j < i; j++)
                     {
                         foreach (char c in lineParts[j])
                         {
                             char d = (char)(c + (roomId % 26));
                             if (d > 'z') d -= (char)26;
-                            Console.Write(d);
+                            lineString.Append(d);
                         }
-                        Console.Write('-');
+                        lineString.Append('-');
                     }
-                    Console.WriteLine(roomId);
+
+                    String translatedLine = lineString.ToString();
+
+                    if (translatedLine.StartsWith("north"))
+                    {
+                        partTwo = roomId.ToString();
+                    }
                 }
             }
 

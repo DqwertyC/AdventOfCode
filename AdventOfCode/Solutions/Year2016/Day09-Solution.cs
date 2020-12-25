@@ -10,37 +10,40 @@ namespace AdventOfCode.Solutions.Year2016
         string partOne;
         string partTwo;
 
-        
-
         public Day09() : base(09, 2016, "")
         {
-            string compressed = Input.Replace("\n", "").Replace(" ", "");
-            Decompress(compressed, out string decompressed);
-
-            partOne = decompressed.Length.ToString();
+            var compressedTokens = TokenizeString(Input);
+            partOne = Decompress(compressedTokens, false).ToString();
+            partTwo = Decompress(compressedTokens, true).ToString();
         }
 
-        public static bool Decompress(string compressed, out string decompressed)
+        public static List<CompressionToken> TokenizeString(string input)
         {
-            StringBuilder decompressedBuilder = new StringBuilder();
-            bool containsMarker = false;
+            List<CompressionToken> tokens = new List<CompressionToken>();
+            int tokenLength = 0;
 
-            for (int i = 0; i < compressed.Length; i++)
+            for (int i = 0; i < input.Length; i++)
             {
-                if (compressed[i] != '(')
+                if (input[i] != '(')
                 {
-                    decompressedBuilder.Append(compressed[i]);
+                    tokenLength++;
                 }
                 else
                 {
-                    containsMarker = true;
-
+                    if (tokenLength > 0)
+                    {
+                        tokens.Add(new CompressionToken(tokenLength));
+                    }
+                    
+                    tokenLength = 2;
                     i++;
+
                     StringBuilder marker = new StringBuilder();
 
-                    while (compressed[i] != ')')
+                    while (input[i] != ')')
                     {
-                        marker.Append(compressed[i]);
+                        marker.Append(input[i]);
+                        tokenLength++;
                         i++;
                     }
 
@@ -49,24 +52,65 @@ namespace AdventOfCode.Solutions.Year2016
                     int repeatLength = int.Parse(markerVals[0]);
                     int repeatCount = int.Parse(markerVals[1]);
 
-                    i++;
-                    StringBuilder stringToRepeat = new StringBuilder();
-                    for (int j = 0; j < repeatLength; j++)
-                    {
-                        stringToRepeat.Append(compressed[i]);
-                        i++;
-                    }
-                    i--;
-
-                    for (int j = 0; j < repeatCount; j++)
-                    {
-                        decompressedBuilder.Append(stringToRepeat);
-                    }
+                    tokens.Add(new CompressionToken(tokenLength,repeatLength,repeatCount));
+                    tokenLength = 0;
                 }
             }
 
-            decompressed = decompressedBuilder.ToString();
-            return containsMarker;
+            tokens.Add(new CompressionToken(tokenLength));
+            return tokens;
+        }
+
+        public long Decompress(List<CompressionToken> compressed, bool recurse = false)
+        {
+            long length = 0;
+            int nextLiteralLength = 0;
+
+            for (int i = 0; i < compressed.Count; i++)
+            {
+                if (!compressed[i].isMarker)
+                {
+                    length += compressed[i].maxLength;
+                }
+                else
+                {
+                    List<CompressionToken> sublist = new List<CompressionToken>();
+
+                    int countLeft = compressed[i].copyLength;
+                    int copyTimes = compressed[i].copyAmount;
+
+                    while (countLeft > 0)
+                    {
+                        i++;
+                        if (compressed[i].maxLength <= countLeft)
+                        {
+                            sublist.Add(compressed[i]);
+                            countLeft -= compressed[i].maxLength;
+                        }
+                        else
+                        {
+                            sublist.Add(new CompressionToken(countLeft));
+                            nextLiteralLength = compressed[i].maxLength - countLeft;
+                            countLeft = 0;
+                        }
+                    }
+
+                    if (recurse)
+                    {
+                        length += copyTimes * Decompress(sublist, true);
+                    }
+                    else
+                    {
+                        length += copyTimes * TokenLength(sublist);
+                    }
+
+                    length += nextLiteralLength;
+                    nextLiteralLength = 0;
+
+                }
+            }
+
+            return length;
         }
 
         protected override string SolvePartOne()
@@ -77,6 +121,39 @@ namespace AdventOfCode.Solutions.Year2016
         protected override string SolvePartTwo()
         {
             return partTwo;
+        }
+
+        public class CompressionToken
+        {
+            public bool isMarker;
+            public int maxLength;
+            public int copyLength;
+            public int copyAmount;
+
+            public CompressionToken(int length)
+            {
+                isMarker = false;
+                maxLength = length;
+            }
+
+            public CompressionToken(int length, int copyLen, int copyTimes)
+            {
+                isMarker = true;
+                maxLength = length;
+                copyAmount = copyTimes;
+                copyLength = copyLen;
+            }
+        }
+
+        public static long TokenLength(List<CompressionToken> tokens)
+        {
+            long length = 0;
+            foreach (CompressionToken t in tokens)
+            {
+                length += t.maxLength;
+            }
+
+            return length;
         }
     }
 }

@@ -67,7 +67,7 @@ namespace AdventOfCode.Solutions.Year2020
 
             for (int i = 0; i < 100; i++)
             {
-                onTiles = AddNeighbors(onTiles);
+                AddNeighbors(onTiles);
                 onTiles = RunAutomata(onTiles);
             }
 
@@ -109,25 +109,26 @@ namespace AdventOfCode.Solutions.Year2020
             return newState;
         }
 
-        private static Dictionary<(int, int), bool> AddNeighbors(Dictionary<(int, int), bool> oldState)
+        private static void AddNeighbors(Dictionary<(int, int), bool> tileField)
         {
             // This method removes dead cells too far away to come alive
-            Dictionary<(int, int), bool> newState = new Dictionary<(int, int), bool>();
 
-            foreach ((int,int) tile in oldState.Keys)
+            (int, int)[] oldKeys = new (int, int)[tileField.Keys.Count];
+            tileField.Keys.CopyTo(oldKeys, 0);
+
+            foreach ((int,int) tile in oldKeys)
             {
-                if (oldState[tile]) newState[tile] = true;
-
-                foreach (HexCoordinate neighbor in HexCoordinate.neighbors)
+                if (tileField[tile])
                 {
-                    if (!oldState.GetValueOrDefault(tile + neighbor, false))
+                    foreach (HexCoordinate neighbor in HexCoordinate.neighbors)
                     {
-                        newState[tile + neighbor] = false;
+                        if (!tileField.GetValueOrDefault(tile + neighbor, false))
+                        {
+                            tileField[tile + neighbor] = false;
+                        }
                     }
                 }
             }
-
-            return newState;
         }
 
         protected override string SolvePartOne()
@@ -162,7 +163,6 @@ namespace AdventOfCode.Solutions.Year2020
 
             public static HexCoordinate operator +(HexCoordinate a) => a;
             public static HexCoordinate operator +(HexCoordinate a, HexCoordinate b) => new HexCoordinate(a.x + b.x, a.y + b.y);
-
 
             public static implicit operator HexCoordinate((int x, int y) a) => new HexCoordinate(a.x, a.y);
             public static implicit operator (int x, int y)(HexCoordinate a) => (a.x, a.y);

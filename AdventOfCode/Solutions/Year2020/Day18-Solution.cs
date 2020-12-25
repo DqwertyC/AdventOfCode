@@ -49,6 +49,7 @@ namespace AdventOfCode.Solutions.Year2020
                 if (i < input.Length)
                 {
                     // Don't copy that parenthesis
+                    i++;
 
                     // Get everything in the inner string, including inner parentheticals
                     // Keep going until the matching closing parenthesis

@@ -6,12 +6,31 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace AdventOfCode.Solutions
 {
 
     public static class Utilities
     {
+
+        private static MD5 md5 = System.Security.Cryptography.MD5.Create();
+
+        public static string GetHashMD5(string input)
+        {
+            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+            // Convert the byte array to hexadecimal string
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < hashBytes.Length; i++)
+            {
+                sb.Append(hashBytes[i].ToString("x2"));
+            }
+
+            return sb.ToString();
+        }
 
         public static int[] ToIntArray(this string str, string delimiter = "")
         {
@@ -320,6 +339,11 @@ namespace AdventOfCode.Solutions
                 (-1,-1),(-1,+0),(-1,+1),
                 (+0,-1),        (+0,+1),
                 (+1,-1),(+1,+0),(+1,+1)
+            };
+
+            public static Coordinate2D[] gridNeighbors =
+            {
+                (-1,+0),(+0,-1),(+0,+1),(+1,+0)
             };
 
         }
